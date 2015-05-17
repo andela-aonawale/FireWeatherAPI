@@ -1,0 +1,15 @@
+{
+  "name": "FireWeatherAPI",
+  "version": "1.0.0",
+  "description": "fireweather api",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Ahmed Onawale",
+  "license": "MIT"
+}
