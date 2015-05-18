@@ -2,52 +2,49 @@ var express = require("express");
 var	Firebase = require("firebase");
 var CronJob = require ("cron").CronJob;
 var request = require("request");
-var async = require("async");
 var config = require("./config/config")();
-var rootRef = new Firebase("https://fireweather.firebaseio.com/");
+var rootRef = new Firebase(config[process.env.NODE_ENV].firebaseUrl);
 
 var app = express();
-var cities = ["lagos", "calabar", "oyo", "ogun"];
+var cities = ["lagos", "abeokuta", "ibadan", "port-harcourt", "calabar"];
 
-var getWeatherForcast = new CronJob({
-	cronTime: "*/5 * * * * *",
+var getDailyForecast = new CronJob({
+	cronTime: config[process.env.NODE_ENV].dailyCronTime,
 	onTick: function() {
-		async.waterfall([
-	    function(callback){
-	      setWeatherForcast(cities, "5days");
-	      callback(null);
-	    },
-	    function(callback){
-	      setWeatherForcast(cities, "daily");
-	      callback(null);
-	    }
-		],
-		// optional callback
-		function(err, results){
-		  //
-		});
+		setWeatherForecast(cities, "daily");
 	},
 	start: false
 });
 
-var setWeatherForcast = function(cities, typeOfForcast) {
+var get5daysForecast = new CronJob({
+	cronTime: config[process.env.NODE_ENV].fiveDaysCronTime,
+	onTick: function() {
+		setWeatherForecast(cities, "5days");
+	},
+	start: false
+});
+
+var setWeatherForecast = function(cities, typeOfForecast) {
 	cities.forEach(function(city) {
 		var url, ref;
-		if(typeOfForcast === "daily"){
+		if(typeOfForecast === "daily"){
 			url = "http://api.openweathermap.org/data/2.5/weather?q=" +city+ ",ng&units=metric";
 			ref = rootRef.child("cities/" +city+ "/dailyForcast");
 		} else {
 			url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" +city+ ",ng&units=metric&cnt=5";
 			ref = rootRef.child("cities/" +city+ "/5DaysForcast");
 		}
-		request(url, function(err, res, body){
+		request(url, function(error, response, body){
 			console.log(body);
-			ref.set(JSON.parse(body));
+			if(response.statusCode === 200) {
+				ref.set(JSON.parse(body));
+			}
 		});
 	})
 };
 
 app.listen(config.port, function() {
-	getWeatherForcast.start();
+	getDailyForecast.start();
+	get5daysForecast.start();
 	console.log('Express app listening on port: ' +config.port);
 });
