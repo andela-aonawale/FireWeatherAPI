@@ -10,8 +10,8 @@ module.exports = function(){
 		},
 		production: {
 			firebaseUrl: "https://fireweather.firebaseio.com/",
-			dailyCronTime: "00 */5 * * * *",
-			fiveDaysCronTime: "00 */7 * * * *"
+			dailyCronTime: "00 00 */1 * * *",
+			fiveDaysCronTime: "00 00 */8 * * *"
 		},
 		port: process.env.PORT || 8888
 	}
