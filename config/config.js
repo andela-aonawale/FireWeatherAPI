@@ -3,7 +3,7 @@ module.exports = function(){
 		development: {
 			firebaseUrl: "https://fireweather.firebaseio.com/",
 			dailyCronTime: "*/5 * * * * *",
-			fiveDaysCronTime: "*/7 * * * * *"
+			fiveDaysCronTime: "*/5 * * * * *"
 		},
 		test: {
 
