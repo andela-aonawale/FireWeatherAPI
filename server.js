@@ -9,31 +9,36 @@ var rootRef = new Firebase("https://fireweather.firebaseio.com/");
 var app = express();
 var cities = ["lagos", "calabar", "oyo", "ogun"];
 
-var getDailyForcast = new CronJob({
+var getWeatherForcast = new CronJob({
 	cronTime: "*/5 * * * * *",
-	onTick: function(){
-		setForcastValue(cities, "daily");
+	onTick: function() {
+		async.waterfall([
+	    function(callback){
+	      setWeatherForcast(cities, "5days");
+	      callback(null);
+	    },
+	    function(callback){
+	      setWeatherForcast(cities, "daily");
+	      callback(null);
+	    }
+		],
+		// optional callback
+		function(err, results){
+		  //
+		});
 	},
 	start: false
 });
 
-var get5DaysForcast = new CronJob({
-	cronTime: "*/7 * * * * *",
-	onTick: function(){
-		setForcastValue(cities, "5days");
-	},
-	start: false
-});
-
-var setForcastValue = function(cities, typeOfForcast) {
+var setWeatherForcast = function(cities, typeOfForcast) {
 	cities.forEach(function(city) {
 		var url, ref;
 		if(typeOfForcast === "daily"){
 			url = "http://api.openweathermap.org/data/2.5/weather?q=" +city+ ",ng&units=metric";
-			ref = rootRef.child("cities/" +city+ "/dailyWeather");
+			ref = rootRef.child("cities/" +city+ "/dailyForcast");
 		} else {
 			url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" +city+ ",ng&units=metric&cnt=5";
-			ref = rootRef.child("cities/" +city+ "/5DaysForecast");
+			ref = rootRef.child("cities/" +city+ "/5DaysForcast");
 		}
 		request(url, function(err, res, body){
 			console.log(body);
@@ -43,6 +48,6 @@ var setForcastValue = function(cities, typeOfForcast) {
 };
 
 app.listen(config.port, function() {
-	async.series([getDailyForcast.start(), get5DaysForcast.start()]);
+	getWeatherForcast.start();
 	console.log('Express app listening on port: ' +config.port);
 });
