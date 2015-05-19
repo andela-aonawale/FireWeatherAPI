@@ -1,15 +1,16 @@
 module.exports = function(){
 	return {
+		firebaseUrl: "https://fireweather.firebaseio.com/",
+		dailyWeatherUrl: "http://api.openweathermap.org/data/2.5/weather?units=metric&q=",
+		fiveDaysWeatherUrl: "http://api.openweathermap.org/data/2.5/forecast/daily?units=metric&cnt=6&q=",
 		development: {
-			firebaseUrl: "https://fireweather.firebaseio.com/",
-			dailyCronTime: "*/5 * * * * *",
-			fiveDaysCronTime: "*/5 * * * * *"
+			dailyCronTime: "*/7 * * * * *",
+			fiveDaysCronTime: "*/12 * * * * *"
 		},
 		test: {
 
 		},
 		production: {
-			firebaseUrl: "https://fireweather.firebaseio.com/",
 			dailyCronTime: "00 00 */1 * * *",
 			fiveDaysCronTime: "00 00 */8 * * *"
 		},
