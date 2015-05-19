@@ -11,8 +11,8 @@ module.exports = function(){
 
 		},
 		production: {
-			dailyCronTime: "00 */1 * * * *",
-			fiveDaysCronTime: "00 */1 * * * *"
+			dailyCronTime: "00 */10 * * * *",
+			fiveDaysCronTime: "00 05 */3 * * *"
 		},
 		port: process.env.PORT || 8888
 	}
