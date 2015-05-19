@@ -26,7 +26,7 @@ var setWeatherForecast = function(cities, typeOfForecast) {
 					days[number] = {
 						day: daysOfTheWeek[today.getDay()],
 						humidity: day.humidity,
-						wind-speed: day.speed,
+						windSpeed: day.speed,
 						temperature: {
 							min: Math.round(day.temp.min),
 							max: Math.round(day.temp.max)
