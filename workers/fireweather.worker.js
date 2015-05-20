@@ -49,7 +49,7 @@ module.exports = {
 		onTick: function() {
 			setWeatherForecast(cities, "daily");
 		},
-		start: false
+		start: true
 	}),
 
 	get5daysForecast: new CronJob({
@@ -57,6 +57,6 @@ module.exports = {
 		onTick: function() {
 			setWeatherForecast(cities, "5days");
 		},
-		start: false
+		start: true
 	})
 }
